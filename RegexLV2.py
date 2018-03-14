@@ -32,4 +32,32 @@ print(re.search(r'\bthe', 'bite the dog').group())  # 在边界
 print(re.search(r'\bthe', 'bitethe dog'))  # 有边界
 print(re.search(r'\Bthe', 'bitethe dog').group())  # 无边界
 
+# 使用findall()和finditer()查找每一次出现的位置
+list1 = re.findall('car', 'car')
+print(list1)
+list2 = re.findall('car', 'scary')
+print(list2)
+list3 = re.findall('car', 'carry the barcardi to the car')
+print('list3[1]: ' + list3[1])
 
+s = 'This and that.'
+list4 = re.findall(r'(th\w+) and (th\w+)', s, re.I)
+print(type(list4))
+for item in list4:
+	print (item)
+# python3.6.4无法编译，2.7.10可编译
+# print(re.finditer(r'(th\w+) and (th\w+)', s, re.I).next().groups()) 
+for m in re.finditer(r'(th\w+) and (th\w+)', s, re.I):
+	print (m)
+
+# 使用sub()和subn()搜索和替换
+print(re.sub('X', 'Mr. Smith', 'attn: X\n\nDear X, \n'))
+print(re.subn('X', 'Mr. Smith', 'attn: X\n\nDear X, \n'))
+print(re.sub('[ae]', 'X', 'abcedf'))
+print(re.subn('[ae]', 'X', 'abcedf'))
+
+print(re.split(':', 'str1:str2:str3'))
+DATA = ('Moutain View, CA 94040', 'Sunnyvale, CA', 'Los Altos, 94023',
+	'Cupertino, 95014', 'Palo Alto CA')
+for datum in DATA:
+	print(re.split(', |(?= (?:\d{5}|[A-Z]{2})) ', datum))
