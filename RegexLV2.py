@@ -67,11 +67,12 @@ for datum in DATA:
 print(re.findall(r'(?i)yes', 'yes? Yes. YES!!'))  # 使用re.I/IGNORECASE
 # 使用re.I/IGNORECASE
 print(re.findall(r'(?i)th\w+', 'The quickest way is through this tunnel.'))
-print(re.findall(r'(?im)(^th[\w ]+)', """
-    This line is the first,
-    another line,
-    that line, it's the best
-    """))
+# 使用re.M/MULTILINE
+print(re.findall(r'(?im)(^th[\w ]+)', '''
+This line is the first,
+another line,
+that line, it's the best
+    '''))  # 新一行前不能有tab，空格等字符
 
 # re.S/DOTAALL, 该标记表示点号(.)能够用来表示\n符号(反之其通常用于表示除了\n之外的全部字符)
 print(re.findall(r'th.+', '''
@@ -84,3 +85,5 @@ print(re.findall(r'(?s)th.+', '''
     the second line,
     the third line
     '''))
+
+
