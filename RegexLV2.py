@@ -86,4 +86,17 @@ print(re.findall(r'(?s)th.+', '''
     the third line
     '''))
 
-
+# re.X/VERBOSE&(?:...)
+print(re.search(r'''(?x)
+            \((\d{3})\) # 区号
+            [ ]         # 空白符
+            (\d{3})     # 前缀
+            -           # 横线
+            (\d{4})     # 终点数字
+    ''', '(800) 555-1212').groups())
+print(re.findall(r'http://(?:\w+\.)*(\w+\.com)',
+                 'http://google.com http://www.google.com http://code.google.com'))
+print(re.search(r'\((?P<areacode>\d{3})\) (?P<prefix>\d{3})-(?:\d{4})',
+                '(800) 555-1212').groupdict())
+print(re.sub(r'\((?P<areacode>\d{3})\) (?P<prefix>\d{3})-(?:\d{4})',
+             '(\g<areacode>) \g<prefix>-xxxx', '(800) 555-1212'))
