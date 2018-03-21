@@ -100,3 +100,81 @@ print(re.search(r'\((?P<areacode>\d{3})\) (?P<prefix>\d{3})-(?:\d{4})',
                 '(800) 555-1212').groupdict())
 print(re.sub(r'\((?P<areacode>\d{3})\) (?P<prefix>\d{3})-(?:\d{4})',
              '(\g<areacode>) \g<prefix>-xxxx', '(800) 555-1212'))
+
+# (?x)匹配电话号码
+print(bool(re.match(r'''(?x)
+
+        # match (800) 555-1212, save areacode, prefix, no.
+        \((?P<areacode>\d{3})\)[ ](?P<prefix>\d{3})-(?P<number>\d{4})
+
+        # space
+        [ ]
+
+        # match 800-555-1212
+        (?P=areacode)-(?P=prefix)-(?P=number)
+
+        # space
+        [ ]
+
+        # match 18005551212
+        1(?P=areacode)(?P=prefix)(?P=number)
+
+
+    ''', '(800) 555-1212 800-555-1212 18005551212')))
+
+# (?=...)&(?!...)
+print(re.findall(r'\w+(?= van Rossum)',
+                 '''
+                    Guido van Rossum
+                    Tim Peters
+                    Alex Martelli
+                    Just van Rossum
+                    Raymond Hettinger
+    '''))
+print(re.findall(r'(?m)^\s+(?!noreply|postmaster)(\w+)',
+                 '''
+                sales@phptr.com
+                postmaster@phptr.com
+                eng@phptr.com
+                noreply@phptr.com
+                admin@phptr.com
+    '''))
+print(['%s@aw.com' % e.group(1) for e in
+       re.finditer(r'(?m)^\s+(?!noreply|postmaster)(\w+)',
+                   '''
+        sales@phptr.com
+        postmaster@phptr.com
+        eng@phptr.com
+        noreply@phptr.com
+        admin@phptr.com
+        ''')
+       ])
+
+# 只匹配xy即x后紧跟y
+print(bool(re.search(r'(?:(x)|y)(?(1)y|x)', 'xy')))
+print(bool(re.search(r'(?:(x)|y)(?(1)y|x)', 'xx')))
+
+# 使用Python原始字符串
+# print(re.match('\bblow', 'blow').group())  # \bblow不匹配
+print(re.match('\\bblow', 'blow').group())  # \\bblow匹配
+print(re.match(r'\bblow', 'blow').group())  # 使用raw string
+
+# gendata.py练习
+data = 'Wed Dec 23 19:42:46 2099::lcgg@zgaufnf.org::4101709366-4-7'
+Gen_patt = '^(Tue|Wed|Thu|Fri|Sat|Sun)'
+Gen_M = re.match(Gen_patt, data)
+print(Gen_M.group())
+print(Gen_M.group(1))
+print(Gen_M.groups())
+
+# 更国际化的表达
+Gen_patt_IN = '^(\w{3})'
+print(re.match(Gen_patt_IN, data).group())
+
+# 搜索与匹配......还有贪婪
+print(re.search(r'\d+-\d+-\d+', data).group())  # 目的匹配\d-\d-\d，匹配失败
+print(re.match(r'.+\d+-\d+-\d+', data).group())  # .+ 贪婪的操作符
+# 输出Wed Dec 23 19:42:46 2099::lcgg@zgaufnf.org::4101709366-4-7
+print(re.match(r'.+(\d+-\d+-\d+)', data).group(1))  # .+ 贪婪的操作符,使用圆括号分组
+print(re.match(r'.+?(\d+-\d+-\d+)', data).groups())  # .+ ？非贪婪的操作符
+# 输出('4101709366-4-7',)
